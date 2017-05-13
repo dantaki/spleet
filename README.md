@@ -22,6 +22,8 @@ cmake .. && make
 
 ## Usage 
 
+Spleet currently supports validation of deletion and duplication SV
+
 `spleet --help`
 
 ```
@@ -42,6 +44,13 @@ Options:
     -q        Mapping quality threshold [10]
     -o        Output: filename
 ```
+## Input
+
+* `-i    Input: BAM filename`
+   *  BAM file must be indexed with `samtools index`
+
+* `-r    Input: SV bed file`
+   * The first four tab-delimited columns must be `CHROM START END [DEL|DUP]`   
 
 ## Output
 
