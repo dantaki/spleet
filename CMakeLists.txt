@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(spleet)
+set( CMAKE_C_FLAGS "-Wall -g -O3")
+add_subdirectory(lib/bamtools)
+add_subdirectory(src)
