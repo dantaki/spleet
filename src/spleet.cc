@@ -12,12 +12,13 @@ int main(int argc, char *argv[])
 				"8ee88   88      88eee     88ee   88ee     88  \n\n"
 				"spleet         Validate SV with Split-Reads\n"
 				"Version: 1.0	Author: Danny Antaki <dantaki@ucsd.edu>\n\n"
-				"Usage: spleet -i <in.bam> -l <sv.bed> -q <INT> -o <output.txt>\n\nOptions:\n"
+				"Usage: spleet -i <in.bam> -r <sv.bed> -x <FLOAT> -q <INT> -o <output.txt>\n\nOptions:\n"
 				"    -i        Input: BAM filename\n"
 				"    -r        Input: SV bed file\n"
+				"    -x        Minimum reciprocal overlap [0.5]\n" 
 				"    -q        Mapping quality threshold [10]\n"
 				"    -o        Output: filename\n";
-	string ifh; string bed; string ofh; int Q=10;
+	string ifh; string bed; string ofh; int Q=10; double OVR=0.5;
 	if ( (argc==1) ||
 	     (argc==2 && string(argv[1]) == "-h") ||
 	     (argc==2 && string(argv[1]) == "-help") ||
@@ -28,6 +29,7 @@ int main(int argc, char *argv[])
 		if(string(argv[i]) == "-l" || string(argv[i]) == "-r" || string(argv[i]) == "--l" || string(argv[i])=="--r" || string(argv[i])=="-bed" || string(argv[i])=="--bed"){ bed=string(argv[i+1]); i++; continue; }
 		if(string(argv[i]) == "-o" || string(argv[i]) == "--out" || string(argv[i]) == "-out"){ ofh = string(argv[i+1]); i++; continue; }
 		if(string(argv[i]) == "-q" || string(argv[i]) == "--q"){ Q = atoi(argv[i+1]); i++; continue; }
+		if(string(argv[i]) == "-x" || string(argv[i]) == "--x"){ OVR = ::atof(argv[i+1]); i++; continue; }
 		cerr << "ERROR: Unknown option "<<string(argv[i])<< '\n' << splash <<endl;
 		return 1;
 	}
@@ -87,7 +89,7 @@ int main(int argc, char *argv[])
 				else if(SV == '+') { brkStart=brks[0]; brkEnd=brks[3]; }
 				if(brkStart==0 || brkEnd==0){continue; }
 				float ovr = overlap(start,end,brkStart,brkEnd);
-				if(ovr < 0.5) { continue; }
+				if(ovr < OVR) { continue; }
 				out << primChrom << '\t' << brkStart << '\t' << brkEnd << '\t' << brkEnd-brkStart+1 << '\t' << ovr
 					<< '\t' << al.Name << '\t' << primOri << '|' << splitOri << '\t' 
 					<< CHR << ':' << start << '-' << end << '\t' << TYPE << endl; 

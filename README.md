@@ -36,11 +36,12 @@ eeeee   eeeee   e         eeee   eeee   eeeee
 spleet         Validate SV with Split-Reads
 Version: 1.0	Author: Danny Antaki <dantaki@ucsd.edu>
 
-Usage: spleet -i <in.bam> -l <sv.bed> -q <INT> -o <output.txt>
+Usage: spleet -i <in.bam> -r <sv.bed> -x <FLOAT> -q <INT> -o <output.txt>
 
 Options:
     -i        Input: BAM filename
     -r        Input: SV bed file
+    -x        Minimum reciprocal overlap [0.5]
     -q        Mapping quality threshold [10]
     -o        Output: filename
 ```
