@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
 				int32_t brks[4] = {primLeft++, primRight++, splitLeft, splitRight};
 				sort(brks,brks+4);
 				int32_t brkStart=0; int32_t brkEnd=0;
-				if(SV == '-') { brkStart=brks[1]+1; brkEnd=brks[2]-1; } 
+				if(SV == '-' && brks[2]-brks[1]+1 > 2) { brkStart=brks[1]+1; brkEnd=brks[2]-1; } 
+				else if(SV == '-' && brks[2]-brks[1]+1 <=2) { continue; }
 				else if(SV == '+') { brkStart=brks[0]; brkEnd=brks[3]; }
 				if(brkStart==0 || brkEnd==0){continue; }
 				float ovr = overlap(start,end,brkStart,brkEnd);
