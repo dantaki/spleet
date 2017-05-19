@@ -55,9 +55,9 @@ Options:
 
 ## Output
 
-| CHR | START | END | LENGTH | OVERLAP | READNAME | STRANDS | SV | TYPE |
-| --- | ----- | --- | ------ | ------- | -------- | ------- | --- | --- | 
-| 22 | 582 | 777 | 196 | 0.999992 | SPLEET-READ | +\|+ | 22:581-776 | DEL | 
+| CHR | START | END | LENGTH | OVERLAP | READNAME | ALIGNMENT | STRANDS | SV | TYPE |
+| --- | ----- | --- | ------ | ------- | -------- | ----------| ------- | --- | --- | 
+| 22 | 582 | 777 | 196 | 0.999992 | SPLEET-READ | PRIMARY | +\|+ | 22:581-776 | DEL | 
 
 ## Acknowledgements
 

@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	map<string, int> chrom = hashRef(refs);
 	bool chrFlag=0; if (!refs[0].RefName.compare(0, 3, "chr")){ chrFlag=1; } //chrFlag=true when reference is prefixed with "chr"  
 	ofstream out(ofh.c_str());
-	out << "CHR\tSTART\tEND\tLENGTH\tOVERLAP\tREADNAME\tSTRANDS\tSV\tTYPE" << endl;
+	out << "CHR\tSTART\tEND\tLENGTH\tOVERLAP\tREADNAME\tALIGNMENT\tSTRANDS\tSV\tTYPE" << endl;
 	string line; while(getline(fin,line,'\n'))
 	{
 		vector<string> pos = split(line,'\t');
@@ -65,6 +65,8 @@ int main(int argc, char *argv[])
 				al.IsFailedQC()==true || 
 				al.IsMapped()==false )
 				{ continue; } 	
+			string aln = "PRIMARY";
+			if(al.AlignmentFlag & 2048) { aln = "SUPPLEMENTARY"; }
 			al.BuildCharData();
 			if (!al.HasTag("SA")){ continue; } 
 			string primChrom = refs[al.RefID].RefName;
@@ -82,17 +84,18 @@ int main(int argc, char *argv[])
 				if((SV=='-' || SV == '+') && primOri!=splitOri) { continue; }
 				string splitCig = splitAln[3]; vector<CigarOp> splitCigar = rollCig(splitCig);
 				int32_t splitRight = rightPos(splitLeft,splitCigar);
-				int32_t brks[4] = {primLeft++, primRight++, splitLeft, splitRight};
+				primLeft++; primRight++; //convert to 1-base
+				int32_t brks[4] = {primLeft, primRight, splitLeft, splitRight};
 				sort(brks,brks+4);
 				int32_t brkStart=0; int32_t brkEnd=0;
-				if(SV == '-' && brks[2]-brks[1]+1 > 2) { brkStart=brks[1]+1; brkEnd=brks[2]-1; } 
+				if(SV == '-' && brks[2]-brks[1]+1 > 2) { brkStart=brks[1]; brkEnd=brks[2]; brkStart++; brkEnd--; } 
 				else if(SV == '-' && brks[2]-brks[1]+1 <=2) { continue; }
 				else if(SV == '+') { brkStart=brks[0]; brkEnd=brks[3]; }
 				if(brkStart==0 || brkEnd==0){continue; }
 				float ovr = overlap(start,end,brkStart,brkEnd);
 				if(ovr < OVR) { continue; }
 				out << primChrom << '\t' << brkStart << '\t' << brkEnd << '\t' << brkEnd-brkStart+1 << '\t' << ovr
-					<< '\t' << al.Name << '\t' << primOri << '|' << splitOri << '\t' 
+					<< '\t' << al.Name << '\t' << aln << '\t' << primOri << '|' << splitOri << '\t' 
 					<< CHR << ':' << start << '-' << end << '\t' << TYPE << endl; 
 			}
 		}	
