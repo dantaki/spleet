@@ -61,7 +61,7 @@ Options:
 
 ## Acknowledgements
 
-rgged uses [BamTools](https://github.com/pezmaster31/bamtools)
+spleet uses [BamTools](https://github.com/pezmaster31/bamtools)
 
 > *BamTools*
 > Copyright (c) 2009-2010 Derek Barnett, Erik Garrison, Gabor Marth, Michael Stromberg
