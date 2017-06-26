@@ -65,10 +65,11 @@ int main(int argc, char *argv[])
 				al.IsFailedQC()==true || 
 				al.IsMapped()==false )
 				{ continue; } 	
-			string aln = "PRIMARY";
-			if(al.AlignmentFlag & 2048) { aln = "SUPPLEMENTARY"; }
 			al.BuildCharData();
 			if (!al.HasTag("SA")){ continue; } 
+			string aln = "PRIMARY";
+			if(al.AlignmentFlag & 2048) { aln = "SUPPLEMENTARY"; }
+			if(al.AlignmentFlag & 256) { aln = "SECONDARY"; }
 			string primChrom = refs[al.RefID].RefName;
 			char primOri='+'; if(al.IsReverseStrand()) { primOri='-'; }
 			int32_t primLeft = al.Position;
@@ -90,7 +91,8 @@ int main(int argc, char *argv[])
 				int32_t brkStart=0; int32_t brkEnd=0;
 				if(SV == '-' && brks[2]-brks[1]+1 > 2) { brkStart=brks[1]; brkEnd=brks[2]; brkStart++; brkEnd--; } 
 				else if(SV == '-' && brks[2]-brks[1]+1 <=2) { continue; }
-				else if(SV == '+') { brkStart=brks[0]; brkEnd=brks[3]; }
+				else if(SV == '+' && primRight <= splitLeft) { brkStart=brks[0]; brkEnd=brks[3]; }
+				else if(SV == '+' && primRight > splitLeft) { brkStart=splitLeft; brkEnd=primRight; }
 				if(brkStart==0 || brkEnd==0){continue; }
 				float ovr = overlap(start,end,brkStart,brkEnd);
 				if(ovr < OVR) { continue; }
