@@ -12,10 +12,7 @@ git clone --recursive https://github.com/dantaki/spleet.git
 #### Compile with [CMake](https://cmake.org/)
 
 ```
-cd spleet/
-mkdir build && cd build/
-
-cmake .. && make 
+cd spleet/ && mkdir build && cd build && cmake .. && make
 ```
 
 ##### Binary executable found under `spleet/build/src/spleet`
